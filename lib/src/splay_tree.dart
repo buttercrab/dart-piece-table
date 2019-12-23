@@ -98,9 +98,7 @@ class SplayTree<T, U> {
   ///
   /// Assertion: `a` is not null
   void _rightRotation(_SplayTreeNode<T, U> n) {
-    var a = n.left,
-        b = a.right,
-        p = n.parent;
+    var a = n.left, b = a.right, p = n.parent;
     n.left = b;
     a.right = n;
     p?.left == n ? p?.left = a : p?.right = a;
@@ -185,6 +183,7 @@ class SplayTree<T, U> {
     return n;
   }
 
+  /// max node that `node <= value`
   _SplayTreeNode<T, U> _lowerBound(T value) {
     if (_len == 0) return null;
     var n = _root;
@@ -202,6 +201,7 @@ class SplayTree<T, U> {
     return r;
   }
 
+  /// min node that `node >= value`
   _SplayTreeNode<T, U> _upperBound(T value) {
     if (_len == 0) return null;
     var n = _root;
@@ -219,6 +219,8 @@ class SplayTree<T, U> {
     return r;
   }
 
+  /// finds the value
+  /// if not returns null
   _SplayTreeNode<T, U> _find(T value) {
     if (_len == 0) return null;
     var n = _root;
