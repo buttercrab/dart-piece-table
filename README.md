@@ -1,22 +1,10 @@
-A library for Dart developers.
+# Piece Table
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+A piece table package for dart. 
 
-## Usage
+## Feature, Bugs and Speed
 
-A simple usage example:
+If you want to request feature, found bug, or make this faster, go to github issue.
 
-```dart
-import 'package:piece_table/piece_table.dart';
+## License
 
-main() {
-  var awesome = new Awesome();
-}
-```
-
-## Features and bugs
-
-Please file feature requests and bugs at the [issue tracker][tracker].
-
-[tracker]: http://example.com/issues/replaceme
