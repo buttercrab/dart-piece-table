@@ -287,6 +287,7 @@ class SplayTree<T, U> {
       _root = n.left;
       _root.parent = null;
       n.left = null;
+      _len--;
       return;
     }
 
