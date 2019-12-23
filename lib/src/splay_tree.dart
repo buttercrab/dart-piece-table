@@ -5,7 +5,7 @@ import 'package:tuple/tuple.dart';
 class _SplayTreeNode<T, U> {
   T value;
   U update;
-  _SplayTreeNode parent, left, right;
+  _SplayTreeNode<T, U> parent, left, right;
 
   _SplayTreeNode.empty();
 
@@ -15,7 +15,7 @@ class _SplayTreeNode<T, U> {
 /// node value type T
 /// update value type U
 class SplayTreeIterator<T, U> extends Iterator<Tuple2<T, U>> {
-  _SplayTreeNode _current;
+  _SplayTreeNode<T, U> _current;
 
   SplayTreeIterator(this._current);
 
@@ -28,7 +28,7 @@ class SplayTreeIterator<T, U> extends Iterator<Tuple2<T, U>> {
       }
       return true;
     }
-    while (_current.parent?.left == _current) {
+    while (_current.parent?.right == _current) {
       _current = _current.parent;
     }
     _current = _current.parent;
@@ -36,7 +36,7 @@ class SplayTreeIterator<T, U> extends Iterator<Tuple2<T, U>> {
   }
 
   @override
-  Tuple2<T, U> get current => Tuple2(_current.value, _current.update);
+  Tuple2<T, U> get current => Tuple2(_current?.value, _current?.update);
 }
 
 typedef CompareFunc<T> = bool Function(T a, T b);
@@ -50,7 +50,7 @@ class SplayTree<T, U> {
   int _len;
 
   int get len => _len;
-  _SplayTreeNode _root;
+  _SplayTreeNode<T, U> _root;
 
   SplayTree(this._compareFunc, this._updateFunc) {
     _len = 0;
@@ -58,7 +58,7 @@ class SplayTree<T, U> {
 
   /// update the `update` value
   /// `n` can be null
-  void _updateNode(_SplayTreeNode n) {
+  void _updateNode(_SplayTreeNode<T, U> n) {
     n?.update = _updateFunc(n?.value, n?.left?.update, n?.right?.update);
   }
 
@@ -73,7 +73,7 @@ class SplayTree<T, U> {
   ///   b   y    x   b
   ///
   /// Assertion: `a` is not null
-  void _leftRotation(_SplayTreeNode n) {
+  void _leftRotation(_SplayTreeNode<T, U> n) {
     var a = n.right, b = a.left, p = n.parent;
     n.right = b;
     a.left = n;
@@ -97,8 +97,10 @@ class SplayTree<T, U> {
   /// x   b        b   y
   ///
   /// Assertion: `a` is not null
-  void _rightRotation(_SplayTreeNode n) {
-    var a = n.left, b = a.right, p = n.parent;
+  void _rightRotation(_SplayTreeNode<T, U> n) {
+    var a = n.left,
+        b = a.right,
+        p = n.parent;
     n.left = b;
     a.right = n;
     p?.left == n ? p?.left = a : p?.right = a;
@@ -143,7 +145,7 @@ class SplayTree<T, U> {
   ///    / \     A   B   C   D |  / \       A   B   C   D
   ///   B   C                  | B   C
   ///
-  void _splay(_SplayTreeNode n) {
+  void _splay(_SplayTreeNode<T, U> n) {
     while (n.parent != null) {
       if (n.parent.parent == null) {
         // Zig step
@@ -161,16 +163,18 @@ class SplayTree<T, U> {
         _leftRotation(n.parent);
         _rightRotation(n.parent);
       } else {
+        // Zig-zag step (right)
         _rightRotation(n.parent);
         _leftRotation(n.parent);
       }
     }
+    _root = n;
   }
 
   /// Swap two nodes
   /// swapping values is better than
   /// swapping each parents & children
-  void _swap(_SplayTreeNode a, _SplayTreeNode b) {
+  void _swap(_SplayTreeNode<T, U> a, _SplayTreeNode<T, U> b) {
     var t = a.value;
     a.value = b.value;
     b.value = t;
@@ -179,21 +183,21 @@ class SplayTree<T, U> {
     _updateNode(b);
   }
 
-  _SplayTreeNode _minimum(_SplayTreeNode n) {
+  _SplayTreeNode<T, U> _minimum(_SplayTreeNode<T, U> n) {
     while (n?.left != null) {
       n = n.left;
     }
     return n;
   }
 
-  _SplayTreeNode _maximum(_SplayTreeNode n) {
+  _SplayTreeNode<T, U> _maximum(_SplayTreeNode<T, U> n) {
     while (n?.right != null) {
       n = n.right;
     }
     return n;
   }
 
-  _SplayTreeNode _lowerBound(T value) {
+  _SplayTreeNode<T, U> _lowerBound(T value) {
     if (_len == 0) return null;
     var n = _root;
     var r;
@@ -210,7 +214,7 @@ class SplayTree<T, U> {
     return r;
   }
 
-  _SplayTreeNode _upperBound(T value) {
+  _SplayTreeNode<T, U> _upperBound(T value) {
     if (_len == 0) return null;
     var n = _root;
     var r;
@@ -227,7 +231,7 @@ class SplayTree<T, U> {
     return r;
   }
 
-  _SplayTreeNode _find(T value) {
+  _SplayTreeNode<T, U> _find(T value) {
     if (_len == 0) return null;
     var n = _root;
     while (n != null) {
@@ -247,11 +251,12 @@ class SplayTree<T, U> {
   SplayTreeIterator<T, U> insert(T value) {
     if (_len == 0) {
       _len = 1;
-      _root = _SplayTreeNode(value);
-      return SplayTreeIterator(_root);
+      _root = _SplayTreeNode<T, U>(value);
+      _updateNode(_root);
+      return SplayTreeIterator<T, U>(_root);
     }
     var n = _root;
-    var a = _SplayTreeNode(value);
+    var a = _SplayTreeNode<T, U>(value);
     while (true) {
       if (_compareFunc(value, n.value)) {
         if (n.left == null) {
@@ -274,11 +279,11 @@ class SplayTree<T, U> {
     _splay(a);
     _len++;
 
-    return SplayTreeIterator(a);
+    return SplayTreeIterator<T, U>(a);
   }
 
-  void remove(SplayTreeIterator<T, U> iterator) {
-    if (_len == 0) throw 'remove called but size is 0';
+  void erase(SplayTreeIterator<T, U> iterator) {
+    if (_len == 0) throw 'remove called when size is 0';
     if (iterator?._current == null) throw 'removing null';
     if (_len == 1) {
       _len = 0;
@@ -296,31 +301,35 @@ class SplayTree<T, U> {
 
     var p = t.parent;
     var a = t.left ?? t.right;
-    if (p.left == t) {
-      p.left = a;
-    } else {
-      p.right = a;
-    }
-    a.parent = p;
+    p?.left == t ? p?.left = a : p?.right = a;
+    a?.parent = p;
     t.parent = null;
     t.left = null;
     t.right = null;
+
+    for (var i = p; i != null; i = i.parent) {
+      _updateNode(i);
+    }
     _len--;
   }
 
   SplayTreeIterator<T, U> lower_bound(T value) {
-    return SplayTreeIterator(_lowerBound(value));
+    return SplayTreeIterator<T, U>(_lowerBound(value));
   }
 
   SplayTreeIterator<T, U> upper_bound(T value) {
-    return SplayTreeIterator(_upperBound(value));
+    return SplayTreeIterator<T, U>(_upperBound(value));
   }
 
   SplayTreeIterator<T, U> find(T value) {
-    return SplayTreeIterator(_find(value));
+    return SplayTreeIterator<T, U>(_find(value));
   }
 
-  SplayTreeIterator<T, U> get begin => SplayTreeIterator(_minimum(_root));
+  SplayTreeIterator<T, U> get begin => SplayTreeIterator<T, U>(_minimum(_root));
 
-  SplayTreeIterator<T, U> get end => SplayTreeIterator(_maximum(_root));
+  SplayTreeIterator<T, U> get end => SplayTreeIterator<T, U>(null);
+
+  SplayTreeIterator<T, U> get front => begin;
+
+  SplayTreeIterator<T, U> get back => SplayTreeIterator<T, U>(_maximum(_root));
 }
