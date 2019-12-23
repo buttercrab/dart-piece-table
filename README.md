@@ -1,5 +1,8 @@
 # Piece Table
 
+[![Github Actions](https://github.com/buttercrab/piece_table/workflows/Dart CI/badge.svg
+)](https://github.com/buttercrab/piece_table/actions)
+
 A piece table package for dart. 
 
 ## Feature, Bugs and Speed
