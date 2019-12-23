@@ -171,18 +171,6 @@ class SplayTree<T, U> {
     _root = n;
   }
 
-  /// Swap two nodes
-  /// swapping values is better than
-  /// swapping each parents & children
-  void _swap(_SplayTreeNode<T, U> a, _SplayTreeNode<T, U> b) {
-    var t = a.value;
-    a.value = b.value;
-    b.value = t;
-
-    _updateNode(a);
-    _updateNode(b);
-  }
-
   _SplayTreeNode<T, U> _minimum(_SplayTreeNode<T, U> n) {
     while (n?.left != null) {
       n = n.left;
@@ -293,18 +281,19 @@ class SplayTree<T, U> {
     var n = iterator._current;
     _splay(n);
     var t = _minimum(n.right);
-    if (t != null) {
-      _swap(n, t);
-    } else {
-      t = n;
+    if (t == null) {
+      _root = n.left;
+      _root.parent = null;
+      n.left = null;
+      return;
     }
 
+    n.value = t.value;
+
     var p = t.parent;
-    var a = t.left ?? t.right;
-    p?.left == t ? p?.left = a : p?.right = a;
-    a?.parent = p;
+    p?.left == t ? p?.left = t.right : p?.right = t.right;
+    t.right?.parent = p;
     t.parent = null;
-    t.left = null;
     t.right = null;
 
     for (var i = p; i != null; i = i.parent) {
