@@ -8,3 +8,4 @@ If you want to request feature, found bug, or make this faster, go to github iss
 
 ## License
 
+[Mit License](https://github.com/buttercrab/piece_table/blob/master/LICENSE)
