@@ -1,1 +1,3 @@
 language: dart
+after_success:
+  - npm run coveralls

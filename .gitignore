@@ -11,3 +11,6 @@ build/
 doc/api/
 
 .idea
+
+.coveralls.yml
+node_modules
