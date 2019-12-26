@@ -1,6 +1,7 @@
 # Piece Table
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/buttercrab/piece_table/Dart%20CI?style=flat)](https://github.com/buttercrab/piece_table/actions)
+[![Travis CI](https://img.shields.io/travis/buttercrab/piece_table)](https://travis-ci.org/buttercrab/piece_table)
+[]()
 
 A piece table package for dart. 
 
