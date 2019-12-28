@@ -2,6 +2,7 @@
 
 [![Travis CI](https://img.shields.io/travis/buttercrab/piece_table)](https://travis-ci.org/buttercrab/piece_table)
 [![LICENSE](https://img.shields.io/github/license/buttercrab/piece_table)](https://github.com/buttercrab/piece_table/blob/master/LICENSE)
+[![Version](https://img.shields.io/pub/v/piece_table)](https://pub.dev/packages/piece_table)
 
 A piece table package for dart. 
 

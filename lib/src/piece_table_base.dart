@@ -22,11 +22,13 @@ class PieceTable {
   int _cursorPos;
   SplayTreeIterator _cursorIter;
 
+  /// Cursor position getter
   int get cursor => _cursorPos;
 
   /// Length of string
   int _length;
 
+  /// Length getter
   int get length => _length;
 
   /// Piece Table with original string
@@ -108,6 +110,7 @@ class PieceTable {
           ((value + _cursorPos - pos) << 1) + isAdd, weight, _cursorPos);
     }
     --_cursorPos;
+    --_length;
   }
 
   /// Move cursor by n
