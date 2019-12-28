@@ -5,7 +5,7 @@ import 'package:random_string/random_string.dart';
 PieceTable table;
 
 class PieceTableWriteBenchmark extends BenchmarkBase {
-  const PieceTableWriteBenchmark() : super('Template');
+  const PieceTableWriteBenchmark() : super('Piece Table Write Benchmark');
 
   static void main() {
     PieceTableWriteBenchmark().report();
@@ -31,7 +31,6 @@ class PieceTableWriteBenchmark extends BenchmarkBase {
 void main() {
   for (var i = 1; i <= 5; i++) {
     print('Test $i');
-    print('  Piece Table insert test:');
     PieceTableWriteBenchmark.main();
     print('');
   }

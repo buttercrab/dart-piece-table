@@ -13,8 +13,7 @@ A piece table package for dart.
    insert string from random place
 
 ```
-Piece Table insert test:
-Template(RunTime): 7.122959723345074 us.
+Piece Table Write Benchmark(RunTime): 6.610980176975939 us.
 ```
 
 ## How it is implemented?
@@ -32,11 +31,8 @@ _Benchmark:_
    insert & erase each time from tree size of 1,000,000 for 2 second 
 
 ```
-Splay Tree insert test:
-Template(RunTime): 3.356173762453496 us.
-
-Splay Tree insert & erase test:
-Template(RunTime): 4.436266441896058 us.
+Splay Tree Insert Benchmark(RunTime): 3.387535569105691 us.
+Splay Tree Insert & Erase Benchmark(RunTime): 4.377287132526745 us.
 ```
 
 Above value is for each one insert / one erase.

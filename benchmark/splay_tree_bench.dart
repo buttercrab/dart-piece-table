@@ -7,7 +7,7 @@ SplayTree tree;
 Random random;
 
 class SplayInsertBenchmark extends BenchmarkBase {
-  const SplayInsertBenchmark() : super('Template');
+  const SplayInsertBenchmark() : super('Splay Tree Insert Benchmark');
 
   static void main() {
     SplayInsertBenchmark().report();
@@ -31,7 +31,7 @@ class SplayInsertBenchmark extends BenchmarkBase {
 }
 
 class SplayEraseBenchmark extends BenchmarkBase {
-  const SplayEraseBenchmark() : super('Template');
+  const SplayEraseBenchmark() : super('Splay Tree Insert & Erase Benchmark');
 
   static void main() {
     SplayEraseBenchmark().report();
@@ -66,9 +66,7 @@ class SplayEraseBenchmark extends BenchmarkBase {
 void main() {
   for (var i = 1; i <= 5; i++) {
     print('Test $i');
-    print('  Splay Tree insert test:');
     SplayInsertBenchmark.main();
-    print('  Splay Tree insert & erase test:');
     SplayEraseBenchmark.main();
     print('');
   }
