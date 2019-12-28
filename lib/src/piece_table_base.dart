@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:piece_table/src/splay_tree.dart';
 
 /// Piece Table
@@ -8,8 +10,8 @@ class PieceTable {
 
       /// Position in string of the piece
       /// - origin: (pos << 1) + 0
-      /// - add:    (pos << 1) + 1
-      /// Doing above we can reduce memory
+  /// - add:    (pos << 1) + 1
+  /// Doing above we can reduce memory
       int> _tree;
 
   /// Original string for piece table
@@ -122,6 +124,38 @@ class PieceTable {
     if (_cursorPos < 0) _cursorPos = 0;
     if (_cursorPos > _length) _cursorPos = _length;
     _cursorIter = _tree.lower_bound(_cursorPos);
+  }
+
+  /// Returns string around cursor
+  /// from _cursorPos - before to _cursorPos + after
+  String around(int before, int after) {
+    var ret = StringBuffer();
+    var it = _tree.lower_bound(_cursorPos - before);
+    var start = max(_cursorPos - before, 0);
+    var end = min(_cursorPos + after, _length);
+    var pos = _tree.position(it);
+
+    do {
+      var value = it.current;
+      var weight = it.weight;
+      var isAdd = value & 1;
+      value >>= 1;
+
+      var left = pos < start ? start - pos + value : value;
+      var right = end < pos + weight ? end - pos + value : value + weight;
+
+      if (isAdd == 1) {
+        for (var i = start; i < end; i++) {
+          ret.writeCharCode(_add[i]);
+        }
+      } else {
+        ret.write(_origin.substring(left, right));
+      }
+
+      pos += weight;
+    } while (it.moveNext());
+
+    return ret.toString();
   }
 
   /// Piece table to string
