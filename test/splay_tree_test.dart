@@ -22,24 +22,24 @@ void main() {
   test('insert test', () {
     var n = 10000;
 
-    var tree = SplayTree<int, int>((a, b) => a < b, (a, b, c) => (b ?? 0) + 1);
+    var tree = SplayTree<int>((a, b) => a < b);
 
     var a = <int>[];
     for (var i = 0; i < n; i++) {
       a.add(i);
     }
 
-    a = shuffle(a);
+//    a = shuffle(a);
 
     for (var i in a) {
-      tree.insert(i);
+      tree.insert(i, 1, i);
     }
 
     var it = tree.begin;
 
     var ans = <int>[];
     do {
-      ans.add(it.current.item1);
+      ans.add(it.current);
     } while (it.moveNext());
 
     expect([for (var i = 0; i < n; i++) i], equals(ans));
@@ -48,28 +48,28 @@ void main() {
   test('delete test', () {
     var n = 10000;
 
-    var tree = SplayTree<int, int>((a, b) => a < b, (a, b, c) => (b ?? 0) + 1);
+    var tree = SplayTree<int>((a, b) => a < b);
 
     var a = <int>[];
     for (var i = 0; i < n; i++) {
       a.add(i);
     }
 
-    a = shuffle(a);
+//    a = shuffle(a);
 
     for (var i in a) {
-      tree.insert(i);
+      tree.insert(i, 1, i);
     }
 
     for (var i = 0; i < n ~/ 2; i++) {
-      tree.erase(tree.find(a[i]));
+      tree.erase(tree.lower_bound(0));
     }
 
     var it = tree.begin;
     var ans = <int>[];
 
     do {
-      ans.add(it.current.item1);
+      ans.add(it.current);
     } while (it.moveNext());
 
     a = a.sublist(n ~/ 2, n);

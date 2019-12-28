@@ -15,14 +15,12 @@ class SplayInsertBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    for (var i = 0; i < 1000; i++) {
-      tree.insert(random.nextInt(1000000000));
-    }
+    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
   }
 
   @override
   void setup() {
-    tree = SplayTree<int, int>((a, b) => a < b, (a, b, c) => (b ?? 0) + 1);
+    tree = SplayTree<int>((a, b) => a < b);
     random = Random(328239);
   }
 
@@ -41,21 +39,21 @@ class SplayEraseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    for (var i = 0; i < 1000; i++) {
-      tree.insert(random.nextInt(1000000000));
-    }
+    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
 
-    for (var i = 0; i < 1000; i++) {
-      var it = tree.lower_bound(random.nextInt(1000000000));
-      if (it.current.item1 == null) it = tree.begin;
-      tree.erase(it);
-    }
+    var it = tree.lower_bound(random.nextInt(tree.len + 1));
+    if (it.current == null) it = tree.begin;
+    tree.erase(it);
   }
 
   @override
   void setup() {
-    tree = SplayTree<int, int>((a, b) => a < b, (a, b, c) => (b ?? 0) + 1);
+    tree = SplayTree<int>((a, b) => a < b);
     random = Random(328239);
+
+    for (var i = 0; i < 1000000; i++) {
+      tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
+    }
   }
 
   @override
@@ -65,6 +63,11 @@ class SplayEraseBenchmark extends BenchmarkBase {
 }
 
 void main() {
-  SplayInsertBenchmark.main();
-  SplayEraseBenchmark.main();
+  for (var i = 1; i <= 5; i++) {
+    print('Test $i');
+    print('  Splay Tree insert test:');
+    SplayInsertBenchmark.main();
+    print('  Splay Tree insert & erase test:');
+    SplayEraseBenchmark.main();
+  }
 }
