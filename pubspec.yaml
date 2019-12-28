@@ -1,16 +1,13 @@
 name: piece_table
-description: A starting point for Dart libraries or applications.
-# version: 1.0.0
-# homepage: https://www.example.com
+description: Piece Table implementation with splay tree
+version: 1.0.0
+homepage: https://github.com/butttercrab/piece_table
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
 
-dependencies:
-  #  path: ^1.6.0
-  tuple: ^1.0.3
-  benchmark_harness: any
-
 dev_dependencies:
   pedantic: ^1.8.0
   test: ^1.6.0
+  benchmark_harness: ^1.0.5
+  random_string: ^2.0.1

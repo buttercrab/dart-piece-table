@@ -338,6 +338,20 @@ class SplayTree<T> {
     _len--;
   }
 
+  void updateNode(SplayTreeIterator<T> iterator, {T value, int weight}) {
+    if (iterator?._current == null) throw 'updating null';
+    if (value == null && weight == null) throw 'new values are null';
+    var n = iterator._current;
+    if (value != null) {
+      n.value = value;
+    }
+    if (weight != null) {
+      _splay(n);
+      n.weight = weight;
+      _updateNode(n);
+    }
+  }
+
   int position(SplayTreeIterator<T> iterator) {
     if (iterator?._current == null) throw 'removing null';
     var n = iterator._current;

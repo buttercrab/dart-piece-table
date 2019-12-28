@@ -14,7 +14,7 @@ class PieceTable {
   String _origin;
 
   /// addition for piece table
-  StringBuffer _add;
+  List<int> _add;
 
   /// Cursor position
   int _cursorPos;
@@ -22,10 +22,16 @@ class PieceTable {
 
   int get cursor => _cursorPos;
 
+  /// length of string
+  int _length;
+
+  int get length => _length;
+
   PieceTable(this._origin) {
     _tree = SplayTree((a, b) => a < b);
-    _add = StringBuffer();
+    _add = [];
     _cursorPos = 0;
+    _length = 0;
 
     if (_origin.isNotEmpty) {
       _cursorIter = _tree.insert(0, _origin.length, 0);
@@ -45,9 +51,8 @@ class PieceTable {
       value >>= 1;
 
       if (pos + weight == _cursorPos) {
-        if (isAdd && value + weight == _add.length) {
-          _tree.erase(_cursorIter);
-          _cursorIter = _tree.insert((value << 1) + 1, weight + s.length, pos);
+        if (isAdd == 1 && value + weight == _add.length) {
+          _tree.updateNode(_cursorIter, weight: weight + s.length);
         } else {
           _cursorIter =
               _tree.insert((_add.length << 1) + 1, s.length, _cursorPos);
@@ -56,15 +61,67 @@ class PieceTable {
         _cursorIter =
             _tree.insert((_add.length << 1) + 1, s.length, _cursorPos);
       } else {
-        _tree.erase(_cursorIter);
-        _tree.insert((value << 1) + isAdd, _cursorPos - pos, pos);
-        _tree.insert((value << 1) + 1, weight - _cursorPos + pos,
-            pos + _cursorPos - pos);
+        _tree.updateNode(_cursorIter, weight: _cursorPos - pos);
+        _tree.insert(((value + _cursorPos - pos) << 1) + isAdd,
+            weight - _cursorPos + pos, pos + _cursorPos - pos);
         _cursorIter =
             _tree.insert((_add.length << 1) + 1, s.length, _cursorPos);
       }
     }
     _cursorPos += s.length;
-    _add.write(s);
+    _length += s.length;
+
+    for (var i = 0; i < s.length; i++) {
+      _add.add(s.codeUnitAt(i));
+    }
+  }
+
+  void backspace() {
+    if (_cursorIter == null || _cursorPos == 0) return;
+    var weight = _cursorIter.weight;
+    var value = _cursorIter.current;
+    var pos = _tree.position(_cursorIter);
+    var isAdd = value & 1;
+    value >>= 1;
+
+    if (pos + weight == _cursorPos) {
+      _tree.updateNode(_cursorIter, weight: weight - 1);
+    } else if (pos == _cursorPos) {
+      _cursorIter.moveBack();
+      _tree.updateNode(_cursorIter, weight: _cursorIter.weight - 1);
+    } else {
+      _tree.updateNode(_cursorIter, weight: _cursorPos - pos - 1);
+      _tree.insert(
+          ((value + _cursorPos - pos) << 1) + isAdd, weight, _cursorPos);
+    }
+    --_cursorPos;
+  }
+
+  void moveCursor(int n) {
+    _cursorPos += n;
+    if (_cursorPos < 0) _cursorPos = 0;
+    if (_cursorPos > _length) _cursorPos = _length;
+    _cursorIter = _tree.lower_bound(_cursorPos);
+  }
+
+  @override
+  String toString() {
+    var it = _tree.begin;
+    var buffer = StringBuffer();
+
+    do {
+      var value = it.current;
+      var weight = it.weight;
+      var isAdd = value & 1;
+      value >>= 1;
+
+      for (var i = 0; i < weight; i++) {
+        buffer.writeCharCode(isAdd == 1
+            ? _add.elementAt(i + value)
+            : _origin.codeUnitAt(i + value));
+      }
+    } while (it.moveNext());
+
+    return buffer.toString();
   }
 }

@@ -1,9 +1,18 @@
+import 'package:piece_table/piece_table.dart';
+import 'package:random_string/random_string.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    setUp(() {});
+  test('write test', () {
+    var table = PieceTable.empty();
+    var s = '';
 
-    test('First Test', () {});
+    for (var i = 0; i < 100; i++) {
+      var t = randomString(10);
+      s += t;
+      table.write(t);
+    }
+
+    expect(s, equals(table.toString()));
   });
 }
