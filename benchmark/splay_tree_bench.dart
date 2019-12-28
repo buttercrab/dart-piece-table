@@ -70,5 +70,6 @@ void main() {
     SplayInsertBenchmark.main();
     print('  Splay Tree insert & erase test:');
     SplayEraseBenchmark.main();
+    print('');
   }
 }
