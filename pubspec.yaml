@@ -1,6 +1,6 @@
 name: piece_table
 description: Fast piece table implementation using custom splay tree with cursor support
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/buttercrab/piece_table
 
 environment:

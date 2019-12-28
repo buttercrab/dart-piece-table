@@ -123,9 +123,7 @@ class SplayTree<T> {
   ///
   /// Assertion: `a` is not null
   void _rightRotation(_SplayTreeNode<T> n) {
-    var a = n.left,
-        b = a.right,
-        p = n.parent;
+    var a = n.left, b = a.right, p = n.parent;
     n.left = b;
     a.right = n;
     p?.left == n ? p?.left = a : p?.right = a;
