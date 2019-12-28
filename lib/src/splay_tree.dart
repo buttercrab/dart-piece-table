@@ -73,7 +73,7 @@ class SplayTree<T> {
 
   int _len;
 
-  int get len => _len;
+  int get length => _len;
   _SplayTreeNode<T> _root;
 
   SplayTree(this._compareFunc) {

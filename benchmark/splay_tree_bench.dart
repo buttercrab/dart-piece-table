@@ -15,7 +15,7 @@ class SplayInsertBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
+    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.length + 1));
   }
 
   @override
@@ -39,9 +39,9 @@ class SplayEraseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
+    tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.length + 1));
 
-    var it = tree.lower_bound(random.nextInt(tree.len + 1));
+    var it = tree.lower_bound(random.nextInt(tree.length + 1));
     if (it.current == null) it = tree.begin;
     tree.erase(it);
   }
@@ -52,7 +52,8 @@ class SplayEraseBenchmark extends BenchmarkBase {
     random = Random(328239);
 
     for (var i = 0; i < 1000000; i++) {
-      tree.insert(random.nextInt(1000000000), 1, random.nextInt(tree.len + 1));
+      tree.insert(
+          random.nextInt(1000000000), 1, random.nextInt(tree.length + 1));
     }
   }
 

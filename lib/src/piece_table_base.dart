@@ -1,19 +1,21 @@
 import 'package:piece_table/src/splay_tree.dart';
 
+/// Piece Table
+/// https://en.wikipedia.org/wiki/Piece_table
 class PieceTable {
   /// Main database for piece table
   SplayTree<
 
-      /// position in string of the piece
+      /// Position in string of the piece
       /// - origin: (pos << 1) + 0
       /// - add:    (pos << 1) + 1
       /// Doing above we can reduce memory
       int> _tree;
 
-  /// origin string for piece table
+  /// Original string for piece table
   String _origin;
 
-  /// addition for piece table
+  /// Addition for piece table
   List<int> _add;
 
   /// Cursor position
@@ -22,11 +24,12 @@ class PieceTable {
 
   int get cursor => _cursorPos;
 
-  /// length of string
+  /// Length of string
   int _length;
 
   int get length => _length;
 
+  /// Piece Table with original string
   PieceTable(this._origin) {
     _tree = SplayTree((a, b) => a < b);
     _add = [];
@@ -38,8 +41,14 @@ class PieceTable {
     }
   }
 
+  /// Empty Piece table
   PieceTable.empty() : this('');
 
+  /// Write string in cursor position
+  /// Cursor will be moved by string length like normal text editor
+  ///
+  /// Time Complexity: amortized O(s.length + log(_tree.length))
+  /// (amortized O(s.length) (array append operation) + amortized O(log(_tree.length)) (splay operation))
   void write(String s) {
     if (_cursorIter == null) {
       _cursorIter = _tree.insert((_add.length << 1) + 1, s.length, _cursorPos);
@@ -76,6 +85,10 @@ class PieceTable {
     }
   }
 
+  /// Erase one character in cursor position
+  /// Cursor moves like normal text editor
+  ///
+  /// Time Complexity: amortized O(log(_tree.length)) (splay operation)
   void backspace() {
     if (_cursorIter == null || _cursorPos == 0) return;
     var weight = _cursorIter.weight;
@@ -97,6 +110,10 @@ class PieceTable {
     --_cursorPos;
   }
 
+  /// Move cursor by n
+  /// If it goes out of range, it would stay at the end or start
+  ///
+  /// Time Complexity: amortized O(log(_tree.length)) (splay operation)
   void moveCursor(int n) {
     _cursorPos += n;
     if (_cursorPos < 0) _cursorPos = 0;
@@ -104,6 +121,9 @@ class PieceTable {
     _cursorIter = _tree.lower_bound(_cursorPos);
   }
 
+  /// Piece table to string
+  ///
+  /// Time Complexity: O(length)
   @override
   String toString() {
     var it = _tree.begin;
